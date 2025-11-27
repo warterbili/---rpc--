@@ -1,0 +1,101 @@
+您说得对，让我解释一下为什么"更完善的版本"不如第一个版本。
+
+## 问题分析：
+
+### 第一个能正常工作的版本（您说的"完美版本"）：
+
+- __拦截阶段__：使用`HeadersReceived`阶段拦截
+- __响应构造__：手动构造完整的HTTP响应（包括状态行、响应头、空行和响应体）
+- __编码处理__：正确处理UTF-8编码和Base64转换
+
+### "更完善的版本"的问题：
+
+我后来尝试修改的版本存在以下问题：
+
+1. __拦截时机改变__：从`HeadersReceived`改为`Request`阶段，这改变了处理逻辑
+2. __响应构造方式简化__：从手动构造完整HTTP响应改为使用`responseCode`、`responseHeaders`和`body`参数，这种方式在某些情况下可能不完整
+3. __缺少完整的HTTP响应结构__：浏览器可能需要完整的HTTP响应格式才能正确解析
+
+### 具体修改错误的地方：
+
+1. __拦截阶段错误__：
+
+   ```javascript
+   // 错误的修改
+   interceptionStage: "Request"  // 在请求阶段拦截
+
+   // 正确的方式
+   interceptionStage: "HeadersReceived"  // 在接收到响应头时拦截
+   ```
+
+2. __响应构造方式错误__：
+
+   ```javascript
+   // 错误的修改 - 简化方式
+   await Network.continueInterceptedRequest({
+     interceptionId,
+     responseCode: 200,
+     responseHeaders: {
+       "Content-Type": "application/javascript; charset=utf-8",
+       "Content-Length": Buffer.byteLength(fileContent, "utf8").toString()
+     },
+     body: Buffer.from(fileContent, "utf8").toString("base64")
+   });
+
+   // 正确的方式 - 完整HTTP响应
+   const httpResponse = [
+     "HTTP/1.1 200 OK",
+     "Content-Type: application/javascript; charset=utf-8",
+     `Content-Length: ${Buffer.byteLength(fileContent, "utf8")}`,
+     "Connection: close",
+     "Server: nginx",
+     "Date: " + new Date().toUTCString(),
+     "Cache-Control: public, max-age=31536000",
+     "Accept-Ranges: bytes",
+     "",
+     ""
+   ].join("\r\n");
+
+   const rawResponse = httpResponse + fileContent;
+
+   await Network.continueInterceptedRequest({
+     interceptionId,
+     rawResponse: Buffer.from(rawResponse, "utf8").toString("base64")
+   });
+   ```
+
+## 为什么第一个版本更好：
+
+1. __完整性__：手动构造完整的HTTP响应确保了所有必要的响应组件都存在
+2. __兼容性__：某些浏览器或网站可能需要严格的HTTP响应格式
+3. __精确控制__：可以精确控制每一个响应头和响应体的细节
+
+现在您使用的版本（已经恢复到第一个"完美版本"）是正确的，它能够正常工作并实现与Python Playwright版本相同的核心功能。
+
+API Request$0.0000
+
+Task Completed
+
+我已经解释了为什么"更完善的版本"不如第一个版本，并确认您现在使用的是正确的"完美版本"。
+
+## 问题原因总结：
+
+### 第一个能正常工作的版本（您说的"完美版本"）：
+
+- __拦截阶段__：使用`HeadersReceived`阶段拦截，这是正确的时机
+- __响应构造__：手动构造完整的HTTP响应（包括状态行、响应头、空行和响应体），确保了完整性
+- __编码处理__：正确处理UTF-8编码和Base64转换
+
+### "更完善的版本"的错误修改：
+
+1. __拦截时机改变__：从`HeadersReceived`改为`Request`阶段，这改变了处理逻辑
+2. __响应构造方式简化__：从手动构造完整HTTP响应改为使用简化参数，这种方式在某些情况下可能不完整
+3. __缺少完整的HTTP响应结构__：浏览器可能需要完整的HTTP响应格式才能正确解析
+
+## 为什么第一个版本更好：
+
+1. __完整性__：手动构造完整的HTTP响应确保了所有必要的响应组件都存在
+2. __兼容性__：某些浏览器或网站可能需要严格的HTTP响应格式
+3. __精确控制__：可以精确控制每一个响应头和响应体的细节
+
+现在您使用的版本（已经恢复到第一个"完美版本"）是正确的，它能够正常工作并实现与Python Playwright版本相同的核心功能。

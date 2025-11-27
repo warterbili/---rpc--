@@ -1,0 +1,17 @@
+{
+  "name": "shopeefood-interceptor",
+  "version": "1.0.0",
+  "description": "拦截并替换ShopeeFood网站上的特定JavaScript文件",
+  "main": "enhanced-intercept.js",
+  "scripts": {
+    "start": "node enhanced-intercept.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chrome-remote-interface": "^0.31.1",
+    "chrome-launcher": "^0.15.1"
+  },
+  "keywords": ["chrome", "interception", "shopeefood"],
+  "author": "Automated Script",
+  "license": "ISC"
+}

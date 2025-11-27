@@ -23,14 +23,13 @@ console.log(`使用本地文件: ${localFilePath}`);
 async function launchChrome() {
   return await chromeLauncher.launch({
     chromePath: chromePath,
-    userDataDir: true, // 使用默认用户数据目录
     chromeFlags: [
       '--disable-background-timer-throttling',
       '--disable-renderer-backgrounding',
       '--disable-backgrounding-occluded-windows',
       '--disable-ipc-flooding-protection',
       '--no-default-browser-check',
-      //'--no-first-run', // 移除这个标志以保留用户设置
+      '--no-first-run',
       '--disable-sync',
       '--disable-background-networking',
       '--disable-default-apps',
@@ -41,12 +40,10 @@ async function launchChrome() {
       '--disable-features=IsolateOrigins,site-perprocess',
       '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36',
       '--window-size=1920,1080',
-      '--disable-infobars', // 禁用信息栏
-      '--disable-extensions', // 禁用扩展程序干扰
-      '--test-type', // 避免浏览器显示"由自动化软件控制"提示
-      '--no-sandbox', // 在某些环境下避免沙箱问题
-      '--disable-dev-shm-usage', // 解决内存不足问题
-      '--disable-gpu' // 禁用GPU硬件加速，提高稳定性
+      '--disk-cache-size=0',  // 禁用磁盘缓存
+      '--media-cache-size=0', // 禁用媒体缓存
+      '--disable-application-cache', // 禁用应用缓存
+      '--incognito' // 无痕模式，减少缓存影响
     ]
   });
 }
@@ -77,7 +74,8 @@ async function interceptRequest() {
       Security.handleCertificateError({ eventId, action: 'continue' });
     });
     
-    // 不再禁用网络缓存，以使用用户数据目录的默认行为
+    // 禁用缓存
+    await Network.setCacheDisabled({ cacheDisabled: true });
     
     // 读取本地文件内容
     const localFileContent = fs.readFileSync(localFilePath, 'utf8');

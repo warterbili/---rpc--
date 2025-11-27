@@ -1,0 +1,1 @@
+Error: window.screen.bbb is not a function

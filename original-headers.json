@@ -1,0 +1,13 @@
+{
+  "cache-control": "max-age=604800",
+  "content-encoding": "gzip",
+  "etag": "W/\"69281fcb-2ca54c\"",
+  "x-ratelimit-remaining": "124",
+  "expires": "Thu, 04 Dec 2025 16:15:00 GMT",
+  "date": "Thu, 27 Nov 2025 16:15:00 GMT",
+  "x-ratelimit-limit": "125",
+  "content-type": "application/javascript",
+  "vary": "Accept-Encoding",
+  "server": "SGW",
+  "last-modified": "Thu, 27 Nov 2025 09:54:19 GMT"
+}

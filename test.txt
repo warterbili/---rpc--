@@ -1,0 +1,5 @@
+t[r("0x193")]
+
+      // "--disk-cache-size=0", // 禁用磁盘缓存
+      // "--media-cache-size=0", // 禁用媒体缓存
+      // "--disable-application-cache", // 禁用应用缓存

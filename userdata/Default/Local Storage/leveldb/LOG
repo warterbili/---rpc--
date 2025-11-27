@@ -1,3 +1,5 @@
-2025/11/28-00:33:53.561 5840 Reusing MANIFEST D:\自动化rpc方案\userdata\Default\Local Storage\leveldb/MANIFEST-000001
-2025/11/28-00:33:53.569 5840 Recovering log #3
-2025/11/28-00:33:53.575 5840 Reusing old log D:\自动化rpc方案\userdata\Default\Local Storage\leveldb/000003.log 
+2025/11/28-01:28:04.697 5fd8 Reusing MANIFEST D:\自动化rpc方案\userdata\Default\Local Storage\leveldb/MANIFEST-000001
+2025/11/28-01:28:04.707 5fd8 Recovering log #3
+2025/11/28-01:28:04.712 5fd8 Reusing old log D:\自动化rpc方案\userdata\Default\Local Storage\leveldb/000003.log 
+2025/11/28-01:28:56.004 5fd8 Level-0 table #5: started
+2025/11/28-01:28:56.017 5fd8 Level-0 table #5: 25991 bytes OK

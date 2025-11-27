@@ -12,8 +12,8 @@ async def main():
         await page.route("**/*", handle_route)
         
         try:
-            # 3. 开始导航（增加超时时间）
-            await page.goto("https://shopeefood.vn/", timeout=60000)
+            # 3. 开始导航（增加更长的超时时间）
+            await page.goto("https://shopeefood.vn/", timeout=120000)
             
             # 保持浏览器打开一段时间以供测试
             await asyncio.sleep(60)

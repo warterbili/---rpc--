@@ -12,7 +12,7 @@ const remoteUrl =
   "https://shopeefood.vn/app/assets/js/vendor-44af7fe3567cabf1519c.js";
 
 // 本地替换文件路径
-const localFilePath = "D:/自动化rpc方案/original-response.js";
+const localFilePath = "D:/自动化rpc方案/vendor-44af7fe3567cabf1519c.js";
 
 // 检查本地文件是否存在
 if (!fs.existsSync(localFilePath)) {
@@ -86,28 +86,23 @@ async function interceptRequest() {
         if (request.url === remoteUrl) {
           console.log("匹配目标URL，准备替换响应内容...");
 
-          // 返回本地文件内容，移除Content-Encoding头部
-          const httpResponse = [
-            "HTTP/1.1 200 OK",
-            "Content-Type: application/javascript; charset=utf-8",
-            `Content-Length: ${Buffer.byteLength(localFileContent, "utf8")}`,
-            "Cache-Control: max-age=604800",
-            "Expires: Thu, 04 Dec 2025 16:15:00 GMT",
-            "Last-Modified: Thu, 27 Nov 2025 09:54:19 GMT",
-            'ETag: W/"69281fcb-2ca54c"',
-            "Server: SGW",
-            "Vary: Accept-Encoding",
-            "x-ratelimit-limit: 125",
-            "x-ratelimit-remaining: 124",
-            "Date: Thu, 27 Nov 2025 16:15:00 GMT",
-            "",
-          ].join("\r\n");
-
-          const rawResponse = httpResponse + localFileContent;
-
+          // 使用更简单的方式直接提供响应内容，而不是构造原始HTTP响应
           await Network.continueInterceptedRequest({
             interceptionId,
-            rawResponse: Buffer.from(rawResponse, "utf8").toString("base64"),
+            responseCode: 200,
+            responseHeaders: {
+              "Content-Type": "application/javascript; charset=utf-8",
+              "Cache-Control": "max-age=604800",
+              "Expires": "Thu, 04 Dec 2025 16:15:00 GMT",
+              "Last-Modified": "Thu, 27 Nov 2025 09:54:19 GMT",
+              "ETag": 'W/"69281fcb-2ca54c"',
+              "Server": "SGW",
+              "Vary": "Accept-Encoding",
+              "x-ratelimit-limit": "125",
+              "x-ratelimit-remaining": "124",
+              "Date": "Thu, 27 Nov 2025 16:15:00 GMT"
+            },
+            body: Buffer.from(localFileContent, "utf8").toString("base64")
           });
 
           console.log("已成功替换为本地文件内容");
